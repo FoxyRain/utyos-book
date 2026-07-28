@@ -1,0 +1,225 @@
+:root{
+  /* кожа переплёта */
+  --leather:#1d140d; --leather2:#2c1f14; --leather3:#3a2a1a;
+  --stitch:#6b4f2c; --gold:#c79a3f; --gold-hi:#ecca7c; --gold-dim:#7c5e28;
+  --wax:#9c2b22; --wax-hi:#cf3a2c;
+  /* бумага страницы */
+  --paper:#ece2c9; --paper2:#ddcfa9; --paper-edge:#bda777; --paper-deep:#cdb98c;
+  --ink:#2a2014; --ink-soft:#5a4a32; --margin:#7a6647;
+  --inkblue:#33425f;            /* чернильные заголовки-акценты */
+  --display:"Ruslan Display", serif;
+  --body:"Vollkorn", Georgia, serif;
+  --hand:"Caveat", cursive;     /* рукописные маргиналии */
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html,body{height:100%}
+body{
+  font-family:var(--body); color:var(--ink);
+  background:
+    radial-gradient(60% 50% at 50% -10%, #2a1d12 0%, transparent 60%),
+    radial-gradient(120% 120% at 50% 120%, #000 0%, transparent 60%),
+    linear-gradient(180deg, #120c08, #0a0705);
+  min-height:100vh; overflow-x:hidden;
+}
+
+/* ===== ambient: пыль в свете ===== */
+.ambient{position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden}
+.ambient i{position:absolute; border-radius:50%;
+  background:radial-gradient(circle, rgba(236,202,124,.85), rgba(199,154,63,.2) 55%, transparent 72%);
+  animation:mote linear infinite; opacity:0}
+@keyframes mote{0%{transform:translateY(0) translateX(0); opacity:0}
+  12%{opacity:.7}86%{opacity:.3}100%{transform:translateY(-108vh) translateX(34px); opacity:0}}
+
+/* ===== КНИГА: корешок + страница ===== */
+.book{position:relative; z-index:2; display:grid; grid-template-columns:330px 1fr;
+  min-height:100vh; max-width:1500px; margin:0 auto;
+  box-shadow:0 30px 80px rgba(0,0,0,.7)}
+@media(max-width:920px){.book{grid-template-columns:1fr}}
+
+/* ----- КОРЕШОК ----- */
+.spine{position:sticky; top:0; align-self:start; height:100vh; overflow-y:auto;
+  display:flex; flex-direction:column; gap:14px; padding:18px 16px 14px;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,.28) 0 1px, transparent 1px 7px),
+    radial-gradient(80% 30% at 50% 0%, rgba(236,202,124,.06), transparent 70%),
+    linear-gradient(100deg, var(--leather3), var(--leather2) 30%, var(--leather) 70%, #140d08);
+  border-right:3px solid #0c0805;
+  box-shadow:inset -10px 0 24px rgba(0,0,0,.6), inset 2px 0 0 rgba(236,202,124,.06)}
+.spine::-webkit-scrollbar{width:8px}
+.spine::-webkit-scrollbar-thumb{background:var(--stitch); border-radius:4px}
+.spine::before{ /* строчка переплёта */
+  content:""; position:absolute; top:0; bottom:0; right:9px; width:0;
+  border-left:1px dashed rgba(236,202,124,.22); pointer-events:none}
+
+.spine-top{display:flex; align-items:center; gap:10px}
+.crest{display:flex; align-items:center; gap:10px; text-decoration:none; color:var(--gold-hi); flex:1}
+.crest svg{width:38px; height:38px; filter:drop-shadow(0 0 8px rgba(199,154,63,.4)); flex:none}
+.crest b{font-family:var(--display); font-weight:400; font-size:1.2rem; letter-spacing:.03em; line-height:1;
+  color:var(--gold-hi); text-shadow:0 1px 0 #000}
+.crest small{display:block; font-family:var(--body); font-size:.5rem; letter-spacing:.3em;
+  text-transform:uppercase; color:var(--gold-dim); margin-top:3px}
+.burger{display:none; background:none; border:1px solid var(--gold-dim); color:var(--gold-hi);
+  font-size:1.2rem; padding:4px 10px; cursor:pointer}
+
+/* прогресс прочтения */
+.progress{display:flex; align-items:center; gap:10px}
+.progress-bar{flex:1; height:6px; border-radius:3px; background:rgba(0,0,0,.4);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.6); overflow:hidden}
+.progress-bar span{display:block; height:100%; width:0; background:linear-gradient(90deg, var(--gold-dim), var(--gold-hi));
+  transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.progress-txt{font-size:.6rem; letter-spacing:.12em; text-transform:uppercase; color:var(--gold-dim); white-space:nowrap}
+.progress-txt b{color:var(--gold-hi); font-family:var(--display); font-size:1rem}
+
+/* поиск */
+.toc-search{position:relative}
+.toc-search svg{position:absolute; left:10px; top:50%; transform:translateY(-50%); width:15px; height:15px; opacity:.7}
+.toc-search input{width:100%; font-family:var(--body); font-size:.85rem; color:var(--paper);
+  background:rgba(0,0,0,.32); border:1px solid rgba(236,202,124,.18); padding:9px 12px 9px 32px; outline:none}
+.toc-search input::placeholder{color:var(--gold-dim)}
+.toc-search input:focus{border-color:var(--gold)}
+
+/* оглавление */
+.toc{display:flex; flex-direction:column; gap:2px; flex:1}
+.toc .vol{font-family:var(--display); font-size:.78rem; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--gold); margin:12px 0 4px; padding-left:4px; border-bottom:1px solid rgba(236,202,124,.14)}
+.toc .vol:first-child{margin-top:2px}
+.toc a{position:relative; display:flex; align-items:center; gap:9px; text-decoration:none;
+  color:#c9b896; font-size:.86rem; line-height:1.25; padding:7px 30px 7px 12px;
+  border-left:2px solid transparent; transition:.2s; cursor:pointer}
+.toc a .n{font-family:var(--display); color:var(--gold-dim); font-size:.82rem; min-width:20px}
+.toc a:hover{color:var(--paper); background:rgba(236,202,124,.05); border-left-color:var(--gold-dim)}
+.toc a.cur{color:var(--gold-hi); background:linear-gradient(90deg, rgba(156,43,34,.28), transparent);
+  border-left-color:var(--wax-hi)}
+.toc a.cur .n{color:var(--wax-hi)}
+/* закладка-выступ у активной главы */
+.toc a.cur::after{content:""; position:absolute; right:-3px; top:50%; transform:translateY(-50%);
+  width:10px; height:22px; background:var(--wax); clip-path:polygon(0 0,100% 0,100% 100%,50% 70%,0 100%);
+  box-shadow:0 2px 4px rgba(0,0,0,.5)}
+/* галочка «проведено» */
+.toc a .done{position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  width:18px; height:18px; border:1px solid var(--gold-dim); border-radius:3px; display:grid; place-items:center;
+  color:transparent; font-size:.7rem; background:rgba(0,0,0,.3); transition:.2s}
+.toc a .done:hover{border-color:var(--gold-hi)}
+.toc a.played .done{background:var(--gold); border-color:var(--gold-hi); color:#1d140d}
+.toc a.played{color:#a99878}
+.toc a.played .n{text-decoration:line-through; text-decoration-color:var(--gold-dim)}
+.toc a.hide{display:none}
+.toc a .badge{margin-left:auto; font-size:.5rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:1px 6px; border:1px solid var(--bc,var(--gold-dim)); color:var(--bc,var(--gold-dim)); border-radius:2px}
+.toc a .badge.tool{--bc:#7fae6a} .toc a .badge.ready{--bc:var(--gold)}
+
+.spine-foot{font-size:.56rem; letter-spacing:.18em; text-transform:uppercase; color:var(--gold-dim);
+  text-align:center; padding-top:8px; border-top:1px solid rgba(236,202,124,.12)}
+
+/* ----- СТРАНИЦА ----- */
+.leaf{position:relative; padding:clamp(26px,5vw,70px) clamp(20px,5vw,90px) 60px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,250,235,.5), transparent 60%),
+    radial-gradient(80% 60% at 100% 100%, rgba(120,90,40,.10), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(120,90,40,.025) 0 1px, transparent 1px 26px),
+    linear-gradient(180deg, var(--paper), var(--paper2));
+  box-shadow:inset 14px 0 30px rgba(0,0,0,.10)}
+.leaf-edge{position:absolute; top:0; bottom:0; width:26px; pointer-events:none; opacity:.5}
+.leaf-edge.left{left:0; background:linear-gradient(90deg, rgba(0,0,0,.18), transparent)}
+.leaf-edge.right{right:0; background:linear-gradient(270deg, rgba(0,0,0,.12), transparent)}
+
+.page{position:relative; max-width:880px; margin:0 auto; min-height:62vh}
+.page.turn{animation:flip .5s ease}
+@keyframes flip{0%{opacity:0; transform:translateX(26px) rotateY(-6deg)}100%{opacity:1; transform:none}}
+
+/* шапка главы: огромный номер-маргиналия + заголовок (асимметрия, не центр) */
+.pg-head{display:grid; grid-template-columns:auto 1fr; gap:18px 22px; align-items:end;
+  border-bottom:2px solid var(--ink); padding-bottom:14px; margin-bottom:8px; position:relative}
+.pg-head .bignum{font-family:var(--display); font-size:clamp(3.4rem,9vw,6.4rem); line-height:.8;
+  color:var(--wax); text-shadow:0 2px 0 rgba(0,0,0,.08)}
+.pg-head .ttl h2{font-family:var(--display); font-weight:400; font-size:clamp(1.7rem,4.4vw,2.9rem);
+  color:var(--ink); line-height:.95; letter-spacing:.01em}
+.pg-head .ttl .vol{font-family:var(--body); font-size:.62rem; letter-spacing:.3em; text-transform:uppercase;
+  color:var(--margin); margin-bottom:6px}
+.pg-head .ttl .kicker{font-style:italic; color:var(--ink-soft); font-size:.95rem; margin-top:6px}
+.pg-tags{grid-column:1 / -1; display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+.pg-tags span{font-size:.56rem; letter-spacing:.14em; text-transform:uppercase; padding:2px 9px;
+  border:1px solid var(--ink-soft); color:var(--ink-soft); border-radius:2px}
+.pg-tags span.tool{border-color:#4f7a45; color:#4f7a45}
+.pg-tags span.ready{border-color:var(--gold-dim); color:var(--gold-dim); background:rgba(199,154,63,.12)}
+
+/* рукописная маргиналия на полях */
+.margin-note{position:absolute; right:-12px; top:120px; width:150px; transform:rotate(2.4deg);
+  font-family:var(--hand); font-size:1.15rem; color:var(--wax); line-height:1.15; opacity:.85;
+  border-left:2px solid rgba(156,43,34,.3); padding-left:10px}
+.margin-note::before{content:"✎ "; font-size:.9em}
+@media(max-width:1180px){.margin-note{position:static; width:auto; transform:none; margin:14px 0;
+  border-left:2px solid rgba(156,43,34,.3)}}
+
+.pg-body{margin-top:22px; font-size:1.04rem; line-height:1.72; color:var(--ink)}
+.pg-body p{margin-bottom:14px}
+.pg-body p:first-letter{}
+.pg-body h3{font-family:var(--display); font-weight:400; font-size:1.3rem; color:var(--inkblue);
+  margin:22px 0 8px; letter-spacing:.02em}
+.pg-body ul{margin:0 0 14px 4px; list-style:none}
+.pg-body li{padding:3px 0 3px 22px; position:relative}
+.pg-body li::before{content:"❧"; position:absolute; left:0; color:var(--wax); font-size:.8rem; top:5px}
+.pg-body .lead{font-size:1.12rem; color:var(--ink-soft); font-style:italic}
+.pg-body code{font-family:var(--hand); font-size:1.1em; color:var(--wax); background:rgba(156,43,34,.07);
+  padding:0 5px; border-radius:2px}
+
+/* вставка-«наклейка» для готового материала */
+.embed{margin:22px 0; padding:16px 18px; background:linear-gradient(180deg, #221a12, #15100a);
+  color:#d8cba6; border:1px solid var(--gold-dim); position:relative;
+  box-shadow:0 10px 24px rgba(0,0,0,.3)}
+.embed::before{content:"встроено из коллекции"; position:absolute; top:-9px; left:14px;
+  font-family:var(--body); font-size:.54rem; letter-spacing:.2em; text-transform:uppercase;
+  background:var(--paper); color:var(--ink-soft); padding:1px 8px}
+.embed h4{font-family:var(--display); font-weight:400; color:var(--gold-hi); font-size:1.1rem; margin-bottom:6px}
+.embed p{font-size:.88rem; color:#bcae8e; line-height:1.5}
+.embed a{color:var(--gold-hi)}
+
+/* заглушка «скоро» для инструментов */
+.soon{margin:22px 0; padding:20px; text-align:center; border:1px dashed var(--ink-soft);
+  color:var(--ink-soft); font-style:italic; background:rgba(120,90,40,.05)}
+.soon b{display:block; font-family:var(--display); font-style:normal; font-size:1.2rem;
+  color:var(--inkblue); margin-bottom:4px; letter-spacing:.03em}
+
+/* навигация страниц */
+.page-nav{display:flex; align-items:center; justify-content:space-between; gap:14px;
+  max-width:880px; margin:40px auto 0; padding-top:18px; border-top:1px solid rgba(42,32,20,.25)}
+.pn{font-family:var(--body); background:none; border:1px solid var(--ink-soft); color:var(--ink);
+  padding:9px 16px; font-size:.82rem; letter-spacing:.06em; cursor:pointer; transition:.2s}
+.pn:hover:not(:disabled){background:var(--ink); color:var(--paper); border-color:var(--ink)}
+.pn:disabled{opacity:.3; cursor:default}
+.pn-hint{font-family:var(--hand); font-size:1.05rem; color:var(--margin)}
+
+/* ===== КОСТЬ НА СТОЛЕ ===== */
+.dice-dock{position:fixed; right:22px; bottom:22px; z-index:40; display:flex; flex-direction:column;
+  align-items:center; gap:8px}
+.dice{width:64px; height:64px; cursor:pointer; border:none; background:none; position:relative;
+  filter:drop-shadow(0 8px 16px rgba(0,0,0,.6)); transition:transform .15s}
+.dice:hover{transform:translateY(-3px) rotate(-4deg)}
+.dice:active{transform:scale(.94)}
+.dice-face{position:absolute; inset:0; display:grid; place-items:center;
+  font-family:var(--display); font-size:1.5rem; color:#1d140d;
+  background:radial-gradient(circle at 34% 28%, var(--gold-hi), var(--gold) 55%, var(--gold-dim));
+  clip-path:polygon(50% 0,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+  box-shadow:inset 0 -4px 8px rgba(0,0,0,.3)}
+.dice.rolling .dice-face{animation:spin .5s linear}
+.dice.crit .dice-face{background:radial-gradient(circle at 34% 28%, #fff3c0, var(--gold-hi) 50%, var(--gold));
+  box-shadow:inset 0 -4px 8px rgba(0,0,0,.3), 0 0 22px 3px var(--gold-hi)}
+.dice.fail .dice-face{background:radial-gradient(circle at 34% 28%, #e07a6a, var(--wax-hi) 55%, var(--wax)); color:#fff}
+@keyframes spin{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(1.12)}100%{transform:rotate(360deg) scale(1)}}
+.dice-cap{font-family:var(--hand); font-size:.95rem; color:var(--gold-dim)}
+.dice-log{display:flex; gap:5px; min-height:20px}
+.dice-log span{font-family:var(--display); font-size:.8rem; color:var(--gold-dim);
+  background:rgba(0,0,0,.4); padding:1px 7px; border-radius:2px}
+.dice-log span.c{color:var(--gold-hi)} .dice-log span.f{color:var(--wax-hi)}
+@media(max-width:920px){.dice-dock{right:14px; bottom:14px}}
+
+/* ===== адаптив корешка ===== */
+@media(max-width:920px){
+  .book{grid-template-columns:1fr}
+  .spine{position:fixed; left:0; top:0; z-index:50; width:300px; max-width:84vw;
+    transform:translateX(-104%); transition:transform .35s cubic-bezier(.2,.8,.2,1);
+    box-shadow:14px 0 40px rgba(0,0,0,.7)}
+  .book.nav-open .spine{transform:none}
+  .burger{display:block}
+}
+@media (prefers-reduced-motion: reduce){*{animation:none!important; transition-duration:.001s!important}}
