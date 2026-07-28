@@ -1,0 +1,62 @@
+/* ===== ТОМ II — стили порталов и сворачиваемых таблиц глав 4–7 ===== */
+
+/* кнопка-портал на полную интерактивную страницу */
+.t2-portal{display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+  font-family:var(--body); font-size:.82rem; letter-spacing:.04em;
+  color:var(--paper); background:linear-gradient(180deg, #2a2014, #1d140d);
+  border:1px solid var(--gold-dim); padding:10px 16px; margin:4px 0 14px;
+  box-shadow:0 4px 10px rgba(0,0,0,.3); transition:.25s}
+.t2-portal:hover{border-color:var(--gold-hi); color:var(--gold-hi);
+  box-shadow:0 0 18px -4px var(--gold), 0 6px 14px rgba(0,0,0,.4)}
+.t2-portal span{font-size:1.1em; transition:transform .25s}
+.t2-portal:hover span{transform:translate(3px,-3px)}
+
+/* сворачиваемый блок */
+.t2-col{margin:10px 0; border:1px solid var(--paper-edge); background:linear-gradient(180deg, rgba(255,250,235,.35), rgba(205,185,140,.2));
+  box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.t2-col-head{width:100%; text-align:left; cursor:pointer; font-family:var(--display); font-weight:400;
+  font-size:1.05rem; color:var(--ink); letter-spacing:.02em;
+  background:linear-gradient(180deg, rgba(199,154,63,.12), transparent);
+  border:none; border-bottom:1px solid var(--paper-edge); padding:11px 44px 11px 16px;
+  position:relative; transition:background .2s}
+.t2-col-head:hover{background:linear-gradient(180deg, rgba(199,154,63,.22), transparent)}
+.t2-col-head:focus-visible{outline:2px solid var(--wax); outline-offset:-2px}
+/* стрелка-индикатор */
+.t2-col-head::after{content:"›"; position:absolute; right:16px; top:50%; transform:translateY(-50%) rotate(90deg);
+  font-size:1.4rem; color:var(--wax); transition:transform .3s}
+.t2-col-body.shut + .t2-col-head::after,
+.t2-col-body.shut ~ .t2-col-head::after{transform:translateY(-50%) rotate(0deg)}
+.t2-col-body{padding:0 16px; max-height:2000px; overflow:hidden; transition:max-height .4s ease, padding .3s}
+.t2-col-body.shut{max-height:0; padding:0 16px}
+
+/* таблицы */
+.t2-tbl{width:100%; border-collapse:collapse; margin:8px 0; font-size:.88rem}
+.t2-tbl th{text-align:left; font-family:var(--display); font-weight:400; font-size:.7rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--margin);
+  border-bottom:2px solid var(--ink-soft); padding:6px 8px}
+.t2-tbl td{padding:7px 8px; border-bottom:1px dotted rgba(42,32,20,.25); color:var(--ink-soft); vertical-align:top}
+.t2-tbl tr:hover td{background:rgba(199,154,63,.08); color:var(--ink)}
+.t2-tbl td:first-child{color:var(--ink); font-weight:600}
+/* цветные маркеры в таблицах иерархии */
+.t2-tbl td:last-child{white-space:nowrap}
+.t2-tbl .t2-dot{display:inline-block; width:12px; height:12px; border-radius:2px;
+  vertical-align:middle; margin-right:6px; box-shadow:0 1px 2px rgba(0,0,0,.3)}
+
+/* списки внутри сворачиваемых блоков */
+.t2-list{list-style:none; margin:6px 0; padding:0}
+.t2-list li{padding:4px 0 4px 22px; position:relative; color:var(--ink-soft); font-size:.9rem; line-height:1.4}
+.t2-list li::before{content:"❧"; position:absolute; left:0; color:var(--wax); font-size:.8rem; top:5px}
+.t2-list li b{color:var(--inkblue); font-style:normal}
+
+/* цитаты */
+.t2-quotes{list-style:none; margin:6px 0; padding:0}
+.t2-quotes li{padding:8px 0 8px 14px; border-left:2px solid var(--wax); margin:6px 0;
+  font-style:italic; color:var(--ink-soft); font-size:.92rem; line-height:1.45;
+  background:rgba(156,43,34,.04)}
+.t2-quotes li::before{content:""; display:none}
+
+@media(max-width:560px){
+  .t2-tbl{font-size:.78rem}
+  .t2-tbl th{font-size:.62rem}
+  .t2-tbl td{padding:5px 4px}
+}
